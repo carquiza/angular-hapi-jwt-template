@@ -9,7 +9,7 @@ const redirect_uri = 'https://local.artof.tech/auth/login_facebook';
 
 var doFBLogin = async (code) => {
     var url = `https://graph.facebook.com/v3.0/oauth/access_token?client_id=${FACEBOOK_APP_ID}&redirect_uri=${encodeURIComponent(redirect_uri)}&client_secret=${FACEBOOK_APP_SECRET}&code=${code}`;
-    console.log(url);
+//    console.log(url);
     var fb_response = await axios.get(url);
     if (fb_response.status == 200) {
         var { access_token, token_type, expires_in } = fb_response.data;
