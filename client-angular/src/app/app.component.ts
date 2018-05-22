@@ -12,6 +12,7 @@ export class AppComponent implements OnInit {
   constructor(private http: HttpClient, private auth: AuthService) { }
 
   title = 'app';
+  isLoggedIn: boolean = false;
   email: string = '';
   password: string = '';
 
@@ -19,6 +20,7 @@ export class AppComponent implements OnInit {
   displayImage: string = '';
 
   ngOnInit() {
+    this.isLoggedIn = this.auth.isAuthenticated();
     let credentials_string = localStorage.getItem('credentials');
     if (credentials_string) {
       let credentials = JSON.parse(credentials_string);
@@ -34,9 +36,9 @@ export class AppComponent implements OnInit {
         if (data['token'])
         {
           this.auth.setToken(data['token']);
+          this.isLoggedIn = true;
           this.auth.setDisplayName(data['displayName']);
           this.displayName = data['displayName'];
-          alert('Logged in');
         }
         else if (data['error'])
         {
@@ -57,6 +59,7 @@ export class AppComponent implements OnInit {
 
   doLogout() {
     this.auth.clearToken();
+    this.isLoggedIn = false;
     window.location.href = '/';
   }
 
