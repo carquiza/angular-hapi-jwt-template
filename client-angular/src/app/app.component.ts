@@ -20,6 +20,8 @@ export class AppComponent implements OnInit {
   displayImage: string = '';
   loginType: string = '';
 
+  error: string = null;
+
   updateCredentials() {
     this.isLoggedIn = this.auth.isAuthenticated();
     let credentials_string = localStorage.getItem('credentials');
@@ -42,7 +44,6 @@ export class AppComponent implements OnInit {
   }
 
   doLogin() {
-    //    alert('dologin');
     let payload = { email: this.email, password: this.password };
     this.http.post('auth/login', payload).subscribe((data) => {
         if (data['token'])
@@ -55,17 +56,17 @@ export class AppComponent implements OnInit {
         else if (data['error'])
         {
           console.log(data['error']);
-          alert(`Login error: ${data['error']}`);
+          this.error = `Login error: ${data['error']}`;
         }
         else
         {
           console.log(data);
-          alert(data);
+          this.error = `Login error: ${data.toString()}`;
         }
       },
       (error) => {
         console.log(error);
-        alert(`Error: ${error}`);
+        this.error = `Error: ${error}`;
       });
   }
 
@@ -77,17 +78,16 @@ export class AppComponent implements OnInit {
 
   tryAuthorizedOnly = () => {
     this.http.get('api/me').subscribe((data) => {
-        console.log(data);
-        alert(`success ${data}`);
+      console.log(data);
+      this.error=`success ${data}`;
       },
       (error) => {
-        alert(`error ${error}`);
+        this.error = `error ${error}`;
       });
   }
 
   doFacebookLogin = () => {
     var url = 'https://www.facebook.com/dialog/oauth?client_id=2037494183239470&redirect_uri=https://local.artof.tech/auth/login_facebook&scope=email,public_profile';
-    //    alert(url);
     window.location.href = url;
   }
 }

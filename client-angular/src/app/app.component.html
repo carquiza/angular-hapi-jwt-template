@@ -11,6 +11,7 @@
     <button (click)="doLogout()">Log out</button><br />
   </div>
   <div *ngIf="!isLoggedIn">
+    (valid username='aaa', password='a')<br />
     Email: <input [(ngModel)]="email" type="email" /><br />
     Password: <input [(ngModel)]="password" type="password" /><br />
     <button (click)="doLogin()">Log in</button><br />
@@ -18,5 +19,7 @@
   </div>
 
   <button (click)="tryAuthorizedOnly()">Try authorized page</button><br />
+
+  <div *ngIf="error">Result: {{error}}<br /></div>
 </div>
 
