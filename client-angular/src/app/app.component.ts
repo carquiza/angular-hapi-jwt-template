@@ -12,21 +12,37 @@ export class AppComponent {
   constructor(private http: HttpClient, private auth: AuthService) { }
 
   title = 'app';
+  email: string = '';
+  password: string = '';
+
+  displayName: string = '';
 
   doLogin = () => {
-//    alert('dologin');
-    this.http.get('auth/login').subscribe((data) => {
-      if (data['token'])
-      {
-        alert("Logged in")
-        this.auth.setToken(data['token']);
-      }
-      else
-      {
-        console.log(data);
-        alert(data);
-      }
-    });
+    //    alert('dologin');
+    let payload = { email: this.email, password: this.password };
+    this.http.post('auth/login', payload).subscribe((data) => {
+        if (data['token'])
+        {
+          this.auth.setToken(data['token']);
+          this.auth.setDisplayName(data['displayName']);
+          this.displayName = data['displayName'];
+          alert('Logged in');
+        }
+        else if (data['error'])
+        {
+          console.log(data['error']);
+          alert(`Login error: ${data['error']}`);
+        }
+        else
+        {
+          console.log(data);
+          alert(data);
+        }
+      },
+      (error) => {
+        console.log(error);
+        alert(`Error: ${error}`);
+      });
   }
 
   doLogout = () => {
@@ -36,8 +52,11 @@ export class AppComponent {
 
   tryAuthorizedOnly = () => {
     this.http.get('api/me').subscribe((data) => {
-      console.log(data);
-      alert(data);
-    });
+        console.log(data);
+        alert(data);
+      },
+      (error) => {
+        alert(`error ${error}`);
+      });
   }
 }

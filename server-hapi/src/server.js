@@ -1,11 +1,13 @@
 const Hapi = require('hapi');
 const HapiAuthJWT2 = require('hapi-auth-jwt2');
 
+const auth_local = require('./auth/auth_local')
+
 const routes = require('./routes');
 const secret = require('./secret');
 
 const validate = async function (decoded, request) {
-    request.user = 'me';
+    request.userid = decoded.userid;
     return { isValid: true };
 }
 
@@ -20,6 +22,7 @@ const init = async () => {
     server.auth.default('jwt');
 
     server.route(routes);
+    server.route(auth_local);
     //server.route({
     //    method: 'GET',
     //    path: '/',

@@ -21,9 +21,16 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\" />
-    <Folder Include="server-hapi" />
+    <Folder Include="src\controllers\" />
+    <Folder Include="src\auth\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\auth\auth_facebook.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="src\auth\auth_local.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="src\routes.js" />
     <Compile Include="src\secret.js" />
     <Compile Include="src\server.js" />
