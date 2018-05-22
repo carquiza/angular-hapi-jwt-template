@@ -1,7 +1,8 @@
 const Hapi = require('hapi');
 const HapiAuthJWT2 = require('hapi-auth-jwt2');
 
-const auth_local = require('./auth/auth_local')
+const auth_local = require('./auth/auth_local');
+const auth_facebook = require('./auth/auth_facebook');
 
 const routes = require('./routes');
 const secret = require('./secret');
@@ -19,18 +20,13 @@ const init = async () => {
         validate: validate,
         verifyOptions: { algorithms: ['HS256'] }
     });
+
     server.auth.default('jwt');
 
-    server.route(routes);
     server.route(auth_local);
-    //server.route({
-    //    method: 'GET',
-    //    path: '/',
-    //    options: { auth: false },
-    //    handler: (request, h) => {
-    //        return [];
-    //    }
-    //});
+    server.route(auth_facebook);
+
+    server.route(routes);
 
     await server.start();
     return server;

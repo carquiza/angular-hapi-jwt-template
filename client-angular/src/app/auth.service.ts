@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 const TOKEN_STORAGE_NAME: string = 'token';
+const CREDENTIALS_STORAGE_NAME: string = 'credentials';
 
 @Injectable()
 export class AuthService {
@@ -27,6 +28,7 @@ export class AuthService {
 
   public clearToken() {
     localStorage.removeItem(TOKEN_STORAGE_NAME);
+    localStorage.removeItem(CREDENTIALS_STORAGE_NAME);
     this.displayName = "";
   }
 

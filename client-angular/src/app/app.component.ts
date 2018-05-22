@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
 
@@ -7,7 +7,7 @@ import { AuthService } from './auth.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   constructor(private http: HttpClient, private auth: AuthService) { }
 
@@ -16,8 +16,18 @@ export class AppComponent {
   password: string = '';
 
   displayName: string = '';
+  displayImage: string = '';
 
-  doLogin = () => {
+  ngOnInit() {
+    let credentials_string = localStorage.getItem('credentials');
+    if (credentials_string) {
+      let credentials = JSON.parse(credentials_string);
+      this.displayName = credentials.displayName;
+      this.displayImage = credentials.displayImage;
+    }
+  }
+
+  doLogin() {
     //    alert('dologin');
     let payload = { email: this.email, password: this.password };
     this.http.post('auth/login', payload).subscribe((data) => {
@@ -45,9 +55,9 @@ export class AppComponent {
       });
   }
 
-  doLogout = () => {
+  doLogout() {
     this.auth.clearToken();
-    alert("Logged out")
+    window.location.href = '/';
   }
 
   tryAuthorizedOnly = () => {
@@ -58,5 +68,11 @@ export class AppComponent {
       (error) => {
         alert(`error ${error}`);
       });
+  }
+
+  doFacebookLogin = () => {
+    var url = 'https://www.facebook.com/dialog/oauth?client_id=2037494183239470&redirect_uri=https://local.artof.tech/auth/login_facebook&scope=email,public_profile';
+    //    alert(url);
+    window.location.href = url;
   }
 }
