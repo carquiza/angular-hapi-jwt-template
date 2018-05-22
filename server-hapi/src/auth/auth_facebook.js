@@ -64,7 +64,13 @@ module.exports = [
                 // TODO: Create a new user using the given facebook id (res.user_id)
                 let email = res.email;
                 let facebook_id = res.user_id;
-                let credentials = { userid: 'ABCD_FB', login: 'facebook', facebook_id: res.user_id, displayName: res.name, displayImage: `http://graph.facebook.com/${facebook_id}/picture?type=square` };
+                let credentials = {
+                    userid: 'USER_GUID_FACEBOOK',
+                    login: 'facebook',
+                    facebook_id: res.user_id,
+                    name: res.name,
+                    image: `http://graph.facebook.com/${facebook_id}/picture?type=square`
+                };
                 let token = JWT.sign(credentials, JWT_SECRET, { expiresIn: '7d' });
                 //return { token: token, displayName: res.name, facebook_id: res.user_id };
                 return `<html><script>localStorage.setItem('token','${token}');localStorage.setItem('credentials','${JSON.stringify(credentials)}');window.location.href='/';</script><body><body></html>`;

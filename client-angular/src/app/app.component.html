@@ -5,6 +5,7 @@
   </h1>
 
   <div *ngIf="isLoggedIn">
+    Login: {{loginType}}<br />
     Hello: {{displayName}}<br />
     <img src="{{displayImage}}" style="height:30px"><br />
     <button (click)="doLogout()">Log out</button><br />

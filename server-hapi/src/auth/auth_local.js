@@ -11,9 +11,14 @@ module.exports = [
             // TODO: Do authentication hre
             if (payload.email == 'aaa' && payload.password == 'a' )
             {
-                let credentials = { userid: 'ABCD', login:'local' };
+                let credentials = {
+                    name: 'Chris',
+                    image: '',
+                    userid: 'USER_GUID_LOCAL',
+                    login: 'local'
+                };
                 let token = JWT.sign(credentials, JWT_SECRET, { expiresIn: '7d' });
-                return { token: token, displayName: 'Chris' };
+                return { token: token, credentials: credentials };
             }
             else
             {

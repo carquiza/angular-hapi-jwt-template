@@ -10,14 +10,6 @@ export class AuthService {
 
   constructor() { }
 
-  public getDisplayName(): string {
-    return this.displayName;
-  }
-
-  public setDisplayName(displayName: string) {
-    this.displayName = displayName;
-  }
-
   public getToken(): string {
     return localStorage.getItem(TOKEN_STORAGE_NAME);
   }

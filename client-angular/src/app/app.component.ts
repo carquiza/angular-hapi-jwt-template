@@ -18,15 +18,27 @@ export class AppComponent implements OnInit {
 
   displayName: string = '';
   displayImage: string = '';
+  loginType: string = '';
 
-  ngOnInit() {
+  updateCredentials() {
     this.isLoggedIn = this.auth.isAuthenticated();
     let credentials_string = localStorage.getItem('credentials');
     if (credentials_string) {
       let credentials = JSON.parse(credentials_string);
-      this.displayName = credentials.displayName;
-      this.displayImage = credentials.displayImage;
+      this.displayName = credentials.name;
+      this.displayImage = credentials.image;
+      this.loginType = credentials.login;
     }
+    else
+    {
+      this.displayName = '';
+      this.displayImage = '';
+      this.loginType = '';
+    }
+  }
+
+  ngOnInit() {
+    this.updateCredentials();
   }
 
   doLogin() {
@@ -37,8 +49,8 @@ export class AppComponent implements OnInit {
         {
           this.auth.setToken(data['token']);
           this.isLoggedIn = true;
-          this.auth.setDisplayName(data['displayName']);
-          this.displayName = data['displayName'];
+          localStorage.setItem('credentials', JSON.stringify(data['credentials']));
+          this.updateCredentials();
         }
         else if (data['error'])
         {
@@ -59,14 +71,14 @@ export class AppComponent implements OnInit {
 
   doLogout() {
     this.auth.clearToken();
-    this.isLoggedIn = false;
+//    this.isLoggedIn = false;
     window.location.href = '/';
   }
 
   tryAuthorizedOnly = () => {
     this.http.get('api/me').subscribe((data) => {
         console.log(data);
-        alert(data);
+        alert(`success ${data}`);
       },
       (error) => {
         alert(`error ${error}`);
