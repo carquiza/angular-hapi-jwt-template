@@ -3,6 +3,9 @@
 bin
 obj
 
+.env
+config/config.json
+
 .npm-install-changed.json
 
 # compiled output

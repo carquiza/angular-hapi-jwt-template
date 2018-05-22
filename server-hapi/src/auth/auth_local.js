@@ -1,4 +1,4 @@
-﻿const secret = require('../secret');
+﻿const JWT_SECRET = process.env.JWT_SECRET;
 const JWT = require('jsonwebtoken');
 
 module.exports = [
@@ -12,7 +12,7 @@ module.exports = [
             if (payload.email == 'aaa' && payload.password == 'a' )
             {
                 let credentials = { userid: 'ABCD', login:'local' };
-                let token = JWT.sign(credentials, secret, { expiresIn: '7d' });
+                let token = JWT.sign(credentials, JWT_SECRET, { expiresIn: '7d' });
                 return { token: token, displayName: 'Chris' };
             }
             else

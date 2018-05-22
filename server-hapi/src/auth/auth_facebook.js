@@ -1,14 +1,14 @@
-﻿const secret = require('../secret');
+﻿const JWT_SECRET = process.env.JWT_SECRET;
+const FACEBOOK_APP_ID = process.env.FACEBOOK_APP_ID;
+const FACEBOOK_APP_SECRET = process.env.FACEBOOK_APP_SECRET;
 const JWT = require('jsonwebtoken');
 const axios = require('axios');
 
-const my_app_id = '2037494183239470';
-const app_secret = '4b10ed0b976f1c5716b1ea660fa5edaf';
 const redirect_uri = 'https://local.artof.tech/auth/login_facebook';
 
 
 var doFBLogin = async (code) => {
-    var url = `https://graph.facebook.com/v3.0/oauth/access_token?client_id=${my_app_id}&redirect_uri=${encodeURIComponent(redirect_uri)}&client_secret=${app_secret}&code=${code}`;
+    var url = `https://graph.facebook.com/v3.0/oauth/access_token?client_id=${FACEBOOK_APP_ID}&redirect_uri=${encodeURIComponent(redirect_uri)}&client_secret=${FACEBOOK_APP_SECRET}&code=${code}`;
     console.log(url);
     var fb_response = await axios.get(url);
     if (fb_response.status == 200) {
@@ -65,7 +65,7 @@ module.exports = [
                 let email = res.email;
                 let facebook_id = res.user_id;
                 let credentials = { userid: 'ABCD_FB', login: 'facebook', facebook_id: res.user_id, displayName: res.name, displayImage: `http://graph.facebook.com/${facebook_id}/picture?type=square` };
-                let token = JWT.sign(credentials, secret, { expiresIn: '7d' });
+                let token = JWT.sign(credentials, JWT_SECRET, { expiresIn: '7d' });
                 //return { token: token, displayName: res.name, facebook_id: res.user_id };
                 return `<html><script>localStorage.setItem('token','${token}');localStorage.setItem('credentials','${JSON.stringify(credentials)}');window.location.href='/';</script><body><body></html>`;
             }

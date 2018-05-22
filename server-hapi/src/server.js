@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const Hapi = require('hapi');
 const HapiAuthJWT2 = require('hapi-auth-jwt2');
 
@@ -5,7 +7,7 @@ const auth_local = require('./auth/auth_local');
 const auth_facebook = require('./auth/auth_facebook');
 
 const routes = require('./routes');
-const secret = require('./secret');
+const secret = process.env.JWT_SECRET;
 
 const validate = async function (decoded, request) {
     request.userid = decoded.userid;
