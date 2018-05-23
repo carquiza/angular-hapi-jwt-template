@@ -1,19 +1,54 @@
 # angular-hapi-jwt-template
 
-A sample local login/facebook login using Angular.io, Hapi and JWT.
+A sample Angular app that demonstrates Facebook and local logins. The back-end is barebones HapiJS, and authentication is handled via JWT.
 
 No database is used; you can hook up your own user lookup in server-hapi/src/auth/auth_local.js. For Facebook logins, add users to your database in server-hapi/src/auth/auth_facebook.js.
 
-Configure your app using .env in the root, copy the existing .env.template to .env and fill in the parameters.
+### Configure your app
 
-I'm using VS2017 as the code editor/debugger; the solution and project files are included.
+You will need to create the following configurations files. *.template files have been provided as a guide.
 
-For Facebook login to work, you will need to run under HTTPS, the keys are installed in:
-localhost/fullchain.pem
-localhost/privkey.pem
+```
+    server-hapi/.env -- copy from server-hapi.env.template or set your ENVIRONMENT variables
+    client-angular/src/environments/environment.ts -- copy from the provided environment.ts.template file
+```
+
+### Requirements for Facebook login
+
+For Facebook login to work, you will need to run under HTTPS.
 
 To set up HTTPS for local development:
-- Generate the keys using LetsEncrypt for your site (I use a wildcard)
-- Redirect your hosts file to localhost (I use a subdomain for mine, hence the wildcard)
+- Generate the keys using LetsEncrypt for your site (You will need access to an actual domain and a VPS)
+- Redirect your domain to localhost using your hosts file
+- Copy the files to the following locations
+```
+    ./localhost/fullchain.pem
+    ./localhost/privkey.pem
+```
+To make things easy for myself, I use a subdomain and generated a key for that just for local development.
+
+### Running the app
+
+On Windows I use two command terminals, one to run ng serve, while API calls are proxied to hapi.
+The proxy configuration is in `./client-angular/proxy.conf.json`.
+
+**Note: This setup is for development only. In production, you should use nginx or similar to serve the angular files statically.**
+
+To run the front-end Angular server:
+```
+    cd client-angular
+    npm run start-dev
+```
+This will run ng serve with additional parameters to load SSL keys from the ./localhost subdirectory.
+There will be a scary message about `--disable-host-check`. If you wish to remove the message, replace the --disable-host-check in package.json with `--host mywebsite.com`.
+
+To run the back-end Hapi server:
+```
+    cd server-hapi
+    npm start
+```
+
+
+I'm using VS2017 as the code editor/debugger; the solution and project files are included. You may step through code by running server-hapi/src/server.js in the IDE.
 
 Chris Arquiza
