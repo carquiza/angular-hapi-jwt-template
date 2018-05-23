@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
+import { environment } from '../environments/environment';  
 
 @Component({
   selector: 'app-root',
@@ -87,7 +88,7 @@ export class AppComponent implements OnInit {
   }
 
   doFacebookLogin = () => {
-    var url = 'https://www.facebook.com/dialog/oauth?client_id=2037494183239470&redirect_uri=https://local.artof.tech/auth/login_facebook&scope=email,public_profile';
+    var url = `https://www.facebook.com/dialog/oauth?client_id=${environment.facebook_app_id}&redirect_uri=${environment.base_url}/auth/login_facebook&scope=email,public_profile`;
     window.location.href = url;
   }
 }

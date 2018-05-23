@@ -1,0 +1,8 @@
+// Copy this to either
+// environment.ts or environment.prod.ts
+
+export const environment = {
+  production: false,
+  base_url: 'https://<Fill in your host here, https is required if using Facebook>',
+  facebook_app_id: '<Fill in your Facebook APP ID here>'
+};

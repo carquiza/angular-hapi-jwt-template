@@ -1,10 +1,11 @@
 ﻿const JWT_SECRET = process.env.JWT_SECRET;
 const FACEBOOK_APP_ID = process.env.FACEBOOK_APP_ID;
 const FACEBOOK_APP_SECRET = process.env.FACEBOOK_APP_SECRET;
+const BASE_URL = process.env.BASE_URL;
 const JWT = require('jsonwebtoken');
 const axios = require('axios');
 
-const redirect_uri = 'https://local.artof.tech/auth/login_facebook';
+const redirect_uri = `${BASE_URL}/auth/login_facebook`;
 
 
 var doFBLogin = async (code) => {
