@@ -9,9 +9,36 @@ const auth_facebook = require('./auth/auth_facebook');
 const routes = require('./routes');
 const secret = process.env.JWT_SECRET;
 
-const validate = async function (decoded, request) {
+const validateJWT = async function (decoded, request) {
     request.userid = decoded.userid;
     return { isValid: true };
+}
+
+const validateLocal = async function (email, password) {
+    // TODO: Validate email and password combination
+    if (email == 'aaa' && password == 'a') {
+        return {
+            userid: '<Made-up-user-GUID>',
+            name: 'Chris',
+            login: 'local',
+            image: ''
+        };
+    }
+    else
+    {
+        return { error: "Invalid email or password" };
+    }
+}
+
+const validateFacebook = async function (facebook_user) {
+    // TODO: Register user if new and return credentials (this goes in the JWT)
+    return {
+        userid: '<Made-up-user-GUID-for-facebook>',
+        name: facebook_user.name,
+        login: 'facebook',                  // Show login type
+        image: `http://graph.facebook.com/${facebook_user.user_id}/picture?type=square`,
+        facebook_id: facebook_user.user_id  // Add in case we need this to display other data
+    };
 }
 
 const init = async () => {
@@ -19,14 +46,14 @@ const init = async () => {
     await server.register(HapiAuthJWT2);
     server.auth.strategy('jwt', 'jwt', {
         key: secret,
-        validate: validate,
+        validate: validateJWT,
         verifyOptions: { algorithms: ['HS256'] }
     });
 
     server.auth.default('jwt');
 
-    server.route(auth_local);
-    server.route(auth_facebook);
+    server.route(auth_local(validateLocal));
+    server.route(auth_facebook(validateFacebook));
 
     server.route(routes);
 

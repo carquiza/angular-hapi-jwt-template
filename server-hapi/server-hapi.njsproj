@@ -16,8 +16,12 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
+    <Content Include=".env">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="package-lock.json" />
     <Content Include="package.json" />
+    <Content Include=".env.template" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\" />
@@ -32,7 +36,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="src\routes.js" />
-    <Compile Include="src\secret.js" />
     <Compile Include="src\server.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />

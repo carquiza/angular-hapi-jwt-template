@@ -53,34 +53,28 @@ var doFBLogin = async (code) => {
     }
 }
 
-module.exports = [
-    {
-        method: 'GET', path: '/auth/login_facebook',
-        options: { auth: false },
-        handler: async (request, h) => {
-            var code = request.query.code;
-            var res = await doFBLogin(code);
-            if (res.logged_in)
-            {
-                // TODO: Create a new user using the given facebook id (res.user_id)
-                let email = res.email;
-                let facebook_id = res.user_id;
-                let credentials = {
-                    userid: 'USER_GUID_FACEBOOK',
-                    login: 'facebook',
-                    facebook_id: res.user_id,
-                    name: res.name,
-                    image: `http://graph.facebook.com/${facebook_id}/picture?type=square`
-                };
-                let token = JWT.sign(credentials, JWT_SECRET, { expiresIn: '7d' });
-                //return { token: token, displayName: res.name, facebook_id: res.user_id };
-                return `<html><script>localStorage.setItem('token','${token}');localStorage.setItem('credentials','${JSON.stringify(credentials)}');window.location.href='/';</script><body><body></html>`;
+module.exports = (validateFacebook) => {
+    return [
+        {
+            method: 'GET', path: '/auth/login_facebook',
+            options: { auth: false },
+            handler: async (request, h) => {
+                var code = request.query.code;
+                var res = await doFBLogin(code);
+                if (res.logged_in) {
+                    // TODO: Create a new user using the given facebook id (res.user_id)
+                    let email = res.email;
+                    let facebook_id = res.user_id;
+                    let credentials = await validateFacebook(res);
+                    let token = JWT.sign(credentials, JWT_SECRET, { expiresIn: '7d' });
+                    //return { token: token, displayName: res.name, facebook_id: res.user_id };
+                    return `<html><script>localStorage.setItem('token','${token}');localStorage.setItem('credentials','${JSON.stringify(credentials)}');window.location.href='/';</script><body><body></html>`;
+                }
+                else {
+                    return { error: res.reason };
+                }
+                return res.logged_in;
             }
-            else
-            {
-                return { error: res.reason };
-            }
-            return res.logged_in;
         }
-    }
-]
+    ]
+}
